@@ -4,14 +4,21 @@ const jwt = require("jsonwebtoken");
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
-  res.render('admin/edit-product', {
-    pageTitle: 'Add Product',
-    path: '/admin/add-product',
-    editing: false,
-    hasError: false,
-    errorMessage: null,
-    validationErrors: []
-  });
+  const token = req.cookies.token;
+  let isLoggedIn;
+  console.log(token);
+  if (token) {
+    isLoggedIn = true;
+    res.render('admin/edit-product', {
+      pageTitle: 'Add Product',
+      path: '/admin/add-product',
+      editing: false,
+      hasError: false,
+      errorMessage: null,
+      validationErrors: [],
+      isAuthenticated:isLoggedIn,
+    });
+  }
 };
 
 
@@ -26,6 +33,9 @@ exports.postAddProduct = async (req, res, next) => {
     const description = req.body.description;
     const details = req.body.details;
     const errors = validationResult(req);
+    const token = await req.cookies.token;
+    const decodedToken = await jwt.verify(token, "your_secret_key");
+    const userId = decodedToken.userId;
 
     if (!errors.isEmpty()) {
       console.log(errors.array());
@@ -54,7 +64,7 @@ exports.postAddProduct = async (req, res, next) => {
       description,
       details,
       imageUrl,
-      userId: req.user,
+      userId,
     });
     await product.save();
 
@@ -78,7 +88,11 @@ exports.getEditProduct = async (req, res, next) => {
     if (!product) {
       return res.redirect("/");
     }
-    res.render("admin/edit-product", {
+    const token = req.cookies.token;
+    let isLoggedIn;
+    if(token){
+      isLoggedIn=true;
+      res.render("admin/edit-product", {
       pageTitle: "Edit Product",
       path: "/admin/edit-product",
       editing: editMode,
@@ -86,7 +100,10 @@ exports.getEditProduct = async (req, res, next) => {
       hasError: false,
       errorMessage: null,
       validationErrors: [],
+      isAuthenticated: isLoggedIn,
     });
+    }
+    
   } catch (err) {
     console.log(err);
     res.redirect("/");
