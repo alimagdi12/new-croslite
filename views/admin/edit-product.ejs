@@ -14,9 +14,9 @@
       <div class="form-control">
         <label for="category">category</label>
         <select class="<%= validationErrors.find(e => e.param === 'category') ? 'invalid' : '' %>" type="text" name="category" id="category" value="<% if (editing || hasError) { %><%= product.category %><% } %>">
-          <option value="book1">Men</option>
-          <option value="book1">Women</option>
-          <option value="book1">Kids</option>
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+          <option value="kids">Kids</option>
 
         </select>
       </div>

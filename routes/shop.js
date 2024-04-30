@@ -41,4 +41,7 @@ router.get('/profile',isAuth,shopController.getProfile);
 
 router.post('/updateUser',isAuth,shopController.postUpdateUser);
 
+router.get('/products?category=${category}',shopController.getFilter)
+
+
 module.exports = router;

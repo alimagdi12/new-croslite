@@ -48,6 +48,12 @@
     }
 
   }
+
+  @media(max-width:1200) {
+    #nav-icons {
+      display: flex !important;
+    }
+  }
 </style>
 <!-- Navbar start -->
 <div class="container-fluid fixed-top">
@@ -108,7 +114,7 @@
           </form>
           <% } %>
         </div>
-        <div class="d-flex m-3 me-0">
+        <div class="d-flex m-3 me-0" id="nav-icons">
           <button class="btn-search btn border btn-md-square rounded-circle bg-white me-4 border-color" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary color"></i></button>
           <a href="/cart" class="position-relative me-4 my-auto color">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bag-heart-fill" viewBox="0 0 16 16">

@@ -103,6 +103,24 @@ exports.postSearch = async (req, res, next) => {
   res.redirect("/search");
 };
 
+
+
+exports.getFilter = async (req, res, next) => {
+  const category = req.query.category || 'all';
+  let products;
+
+  if (category === 'all') {
+    products = await Product.find();
+  } else {
+    products = await Product.find({ category: category });
+  }
+
+  res.json(products);
+};
+
+
+
+
 exports.getProducts = async (req, res, next) => {
   const token = req.cookies.token;
   let isLoggedIn;
@@ -161,6 +179,7 @@ exports.getProducts = async (req, res, next) => {
         previousPage: page - 1,
         lastPage: Math.ceil(totalProducts / perPage),
         isAuthenticated: isLoggedIn,
+        
       });
     } catch (err) {
       console.log(err);

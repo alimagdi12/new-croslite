@@ -69,7 +69,7 @@ exports.postAddProduct = async (req, res, next) => {
     await product.save();
 
     console.log("Created Product");
-    res.redirect("/admin/products");
+    res.redirect("/admin/product");
   } catch (err) {
     console.log(err);
     res.redirect("/");
@@ -113,12 +113,16 @@ exports.getEditProduct = async (req, res, next) => {
 
 exports.postEditProduct = async (req, res, next) => {
   try {
+    const token = await req.cookies.token;
+    const decodedToken = await jwt.verify(token, "your_secret_key");
+    const email = decodedToken.email;
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
     const updatedDesc = req.body.description;
-
+    const updatedCategory = req.body.category;
+    const updatedDetails = req.body.details;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -141,14 +145,16 @@ exports.postEditProduct = async (req, res, next) => {
 
     const product = await Product.findById(prodId);
 
-    if (product.userId.toString() !== req.user._id.toString()) {
-      return res.redirect("/");
-    }
+    // if (product.userId.toString() !== email) {
+    //   return res.redirect("/");
+    // }
 
     product.title = updatedTitle;
     product.price = updatedPrice;
     product.description = updatedDesc;
     product.imageUrl = updatedImageUrl;
+    product.category = updatedCategory;
+    product.details = updatedDetails;
     await product.save();
 
     console.log("UPDATED PRODUCT!");
@@ -162,7 +168,8 @@ exports.postEditProduct = async (req, res, next) => {
 
 exports.getProducts = async (req, res, next) => {
   try {
-    const decodedToken = jwt.verify(req.body.passwordToken, "your_secret_key");
+    const token = await req.cookies.token;
+    const decodedToken = jwt.verify(token, "your_secret_key");
     const userId = decodedToken.userId;
     const products = await Product.find({ userId: userId });
     console.log(products);
