@@ -18,43 +18,47 @@ const transporter = nodemailer.createTransport({
 
 exports.getHome = (req, res, next) => {
   const token = req.cookies.token;
-  let isLoggedIn;
-  console.log(token);
+  let isAuthenticated = false; // Initialize isAuthenticated outside of the if block
+
   if (!token) {
-    isLoggedIn = false;
     Product.find()
       .then((products) => {
         res.render("shop/home", {
           prods: products,
           pageTitle: "Home",
           path: "/products",
-          isAuthenticated: isLoggedIn, // Provide a default value of false
+          isAuthenticated: isAuthenticated, // Use the initialized value
         });
       })
       .catch((err) => {
         console.log(err);
       });
+    return; // Add this to exit the function early if there's no token
   }
+
   jwt.verify(token, "your_secret_key", (err, decodedToken) => {
     if (err) {
-      return (isLoggedIn = false);
+      console.log(err);
+      return res.redirect("/login"); // Redirect to login if token is invalid
     }
+
     console.log(decodedToken);
-    isLoggedIn = true;
+    isAuthenticated = true; // Update isAuthenticated if token is valid
+
     Product.find()
       .then((products) => {
         res.render("shop/home", {
           prods: products,
           pageTitle: "Home",
           path: "/products",
-          isAuthenticated: isLoggedIn, // Provide a default value of false
+          isAuthenticated: isAuthenticated,
         });
       })
       .catch((err) => {
         console.log(err);
+        res.redirect("/login"); // Redirect to login if there's an error
       });
   });
-  // const isLoggedIn = req.cookies.isLoggedIn === "true";
 };
 
 exports.getSearch = (req, res, next) => {
@@ -500,6 +504,10 @@ exports.getOrders = async (req, res, next) => {
 exports.getProfile = async (req, res, next) => {
   try {
     const token = req.cookies.token;
+    let isAuthenticated = false;
+    if (token) {
+      isAuthenticated = true;
+    }
     const decodedToken = jwt.verify(token, "your_secret_key");
     const userId = decodedToken.userId;
     const user = await User.findById(userId);
@@ -517,7 +525,7 @@ exports.getProfile = async (req, res, next) => {
       gender: user.gender,
       email: user.email,
       phone: user.phoneNumber,
-      isAuthenticated: req.cookies.isLoggedIn,
+      isAuthenticated:isAuthenticated,
     });
   } catch (err) {
     console.log(err);
