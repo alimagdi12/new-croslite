@@ -28,8 +28,9 @@
   .left-section {
     margin-right: 100px;
   }
-  
-
+  #men-section {
+    display:none
+  }
 </style>
 </head>
 
@@ -80,101 +81,98 @@
 
 
   <!-- Fruits Shop Start-->
-  <div class="container-fluid fruite py-5">
-    <div class="container py-5">
-      <div class="row g-4 mt-5">
-        <div class="col-lg-12">
-          <div class="row g-4">
+<div class="container-fluid fruite py-5">
+  <div class="container py-5">
+    <div class="row g-4 mt-5">
+      <div class="col-lg-12">
+        <div class="row g-4">
 
-            <div class="col-xl-3">
-              <div class="input-group w-100 mx-auto d-flex">
-                <form action="/search" method="POST" class="d-flex">
-                  <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1" name="search">
-                  <button type="submit" style="border: none;background-color: transparent;"><span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span></button>
-                </form>
-                <!-- <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span> -->
-              </div>
-            </div>
-            <div class="col-6"></div>
-            <div class="col-xl-3">
-              <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
-                <form action="/filter?category=all" method="GET" class="w-100 d-flex" id="categoryForm">
-                  <label for="categories"></label>
-                  <select id="categories" name="category" class="border-0 form-select-sm bg-light me-3" form="categoryForm">
-                    <option value="all">All</option>
-                    <option value="men">Men</option>
-                    <option value="women">Women</option>
-                    <option value="kids">Kids</option>
-                  </select>
-                  <input type="submit" value="Filter" class="btn btn-primary">
-                </form>
-
-                <script>
-                  document.getElementById('categoryForm').addEventListener('submit', function(event) {
-                    const selectedCategory = document.getElementById('categories').value;
-                    const actionUrl = `/filter?category=${selectedCategory}`;
-                    this.action = actionUrl;
-                  });
-                </script>
-
-
-              </div>
+          <div class="col-xl-3">
+            <div class="input-group w-100 mx-auto d-flex">
+              <form action="/search" method="POST" class="d-flex">
+                <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1" name="search">
+                <button type="submit" style="border: none;background-color: transparent;"><span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span></button>
+              </form>
+              <!-- <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span> -->
             </div>
           </div>
-          <div class="row g-4">
-            <div class="col-lg-3">
-              <div class="row g-4 left-section">
-                <div class="col-lg-12">
-                  <div class="mb-3">
-                    <h4>Categories</h4>
-                    <ul>
-                      <li>
-                        <div class="d-flex justify-content-between fruite-name">
-                          <a href="#"></i>Men</a>
-                          <span style="color:#9ecc48">( <%= categoryCounts['men'] || 0 %> )</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="d-flex justify-content-between fruite-name">
-                          <a href="#"></i>Women</a>
-                          <span style="color:#9ecc48">( <%= categoryCounts['women'] || 0 %> )</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="d-flex justify-content-between fruite-name">
-                          <a href="#"></i>Kids</a>
-                          <span style="color:#9ecc48">( <%= categoryCounts['kids'] || 0 %> )</span>
-                        </div>
-                      </li>
-                    </ul>
+          <div class="col-6"></div>
+          <div class="col-xl-3">
+            <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
+              <form action="/filter?category=all" method="GET" class="w-100 d-flex" id="categoryForm">
+                <label for="categories"></label>
+                <select id="categories" name="category" class="border-0 form-select-sm bg-light me-3" form="categoryForm">
+                  <option value="all">All</option>
+                  <option value="men">Men</option>
+                  <option value="women">Women</option>
+                  <option value="kids">Kids</option>
+                </select>
+                <input type="submit" value="Filter" class="btn btn-primary">
+              </form>
 
-                  </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="mb-3">
-                    <h4 class="mb-2">Price</h4>
-                    <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="500" value="0" oninput="amount.value=rangeInput.value">
-                    <output id="amount" name="amount" min-velue="0" max-value="500" for="rangeInput">0</output>
-                  </div>
-                </div>
+              <script>
+                document.getElementById('categoryForm').addEventListener('submit', function(event) {
+                  const selectedCategory = document.getElementById('categories').value;
+                  const actionUrl = `/filter?category=${selectedCategory}`;
+                  this.action = actionUrl;
+                });
+              </script>
 
-              </div>
+
             </div>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-3">
+            <div class="row g-4 left-section">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <h4>Categories</h4>
+                  <ul>
+                    <li>
+                      <div class="d-flex justify-content-between fruite-name">
+                        <a>Men</a>
+                        <span style="color:#9ecc48">( <%= categoryCounts['men'] || 0 %> )</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between fruite-name">
+                        <a>Women</a>
+                        <span style="color:#9ecc48">( <%= categoryCounts['women'] || 0 %> )</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between fruite-name">
+                        <a>Kids</a>
+                        <span style="color:#9ecc48">( <%= categoryCounts['kids'] || 0 %> )</span>
+                      </div>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <h4 class="mb-2">Price</h4>
+                  <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="500" value="0" oninput="amount.value=rangeInput.value">
+                  <output id="amount" name="amount" min-value="0" max-value="500" for="rangeInput">0</output>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-lg-9">
 
 
-
-
-
-            <div class="col-lg-9">
-              <% for(p of prods){%>
-
-
-              <%}%>
-              <div class="row g-4 justify-content-center">
-                <% if (prods.length > 0) { %>
+          <!-- beginning of all products section -->
+          
+          
+            <div class="row g-4 justify-content-center" id="products-section">
+              <% if (prods.length > 0) { %>
               <% for (let product of prods) { %>
               <!-- Product Card -->
-              <div class="col-md-6 col-lg-6 col-xl-4" id="kids">
+              <div class="col-md-6 col-lg-6 col-xl-4">
                 <!-- Card content -->
                 <div class="rounded position-relative fruite-item">
                   <!-- Product Image -->
@@ -230,13 +228,29 @@
 
             </div>
 
+          <!--end of the all products section-->
+
+
+
+
+    
+
+
+
+
+
+
+
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
-  </div>
+</div>
+</div>
+</div>
+</div>
+
   <!-- Fruits Shop End-->
 
   <%- include('../includes/footer.ejs') %>
@@ -244,6 +258,45 @@
 
   <!-- Back to Top -->
   <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+
+
+
+// <script>
+//     var men = document.getElementById('men-button');
+//     var women = document.getElementById('women-button');
+//     var kids = document.getElementById('kids-button');
+//     var menSection = document.getElementById('men-section');
+//     var womenSection = document.getElementById('women-section');
+//     var kidsSection = document.getElementById('kids-section');
+//     var allProductsSection = document.getElementById('products-section');
+
+
+//     const showMen = ()=>{
+//             allProductsSection.style.display='none'; 
+//             menSection.style.display = 'flex';
+//             womenSection.style.display = 'none';
+//             kidsSection.style.display = 'none';
+//     }
+//     const showWomen = ()=>{
+//             allProductsSection.style.display='none'; 
+//             menSection.style.display = 'none';
+//             womenSection.style.display = 'flex';
+//             kidsSection.style.display = 'none';
+        
+//     }
+//     const showKids = ()=>{
+        
+//             document.getElementById('men-section').style.display = 'none';
+//             document.getElementById('women-section').style.display = 'none';
+//             document.getElementById('kids-section').style.display = 'flex';
+//             allProductsSection.style.display='none'; 
+
+//     }
+    
+// </script>
+
+
 
 
 
