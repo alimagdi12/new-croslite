@@ -24,6 +24,15 @@ const productSchema = new Schema({
     required:true
   },
   imageUrl: {
+    images: [
+      {
+        type: String,
+        required: true
+      }
+    ]
+    
+  },
+  folderName: {
     type: String,
     required: true
   },
@@ -37,5 +46,13 @@ const productSchema = new Schema({
     required: true
   }
 });
+
+
+
+productSchema.methods.addImageUrl = function(imageUrl) {
+    this.imageUrl.images.push(imageUrl);
+    return this.save();
+};
+
 
 module.exports = mongoose.model('Product', productSchema);

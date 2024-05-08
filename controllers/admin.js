@@ -23,22 +23,20 @@ exports.getAddProduct = (req, res, next) => {
 
 
 
-
 exports.postAddProduct = async (req, res, next) => {
   try {
     const category = req.body.category;
     const title = req.body.title;
-    const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
     const details = req.body.details;
     const errors = validationResult(req);
 
-    const token = await req.cookies.token;
-    const decodedToken = await jwt.verify(token, "your_secret_key");
+    const token = req.cookies.token;
     if (!token) {
-      
+      return res.redirect("/login");
     }
+    const decodedToken = jwt.verify(token, "your_secret_key");
     const userId = decodedToken.userId;
 
     if (!errors.isEmpty()) {
@@ -51,7 +49,7 @@ exports.postAddProduct = async (req, res, next) => {
         product: {
           category,
           title,
-          imageUrl,
+          imageUrl: { images: [] },
           price,
           description,
           details,
@@ -61,13 +59,18 @@ exports.postAddProduct = async (req, res, next) => {
       });
     }
 
+    const images = req.files.map(file => file.filename); // Get an array of all filenames
+    const productName = title.split(" ").join(""); // Remove spaces from the product name
+    const folderName = category + '-' + productName + '-' + new Date().toISOString().split('T')[0];
+
     const product = new Product({
       category,
       title,
       price,
       description,
       details,
-      imageUrl,
+      imageUrl: { images }, // Save all filenames in the images array
+      folderName, // Save the folder name
       userId,
     });
     await product.save();
@@ -76,9 +79,11 @@ exports.postAddProduct = async (req, res, next) => {
     res.redirect("/admin/product");
   } catch (err) {
     console.log(err);
-    res.redirect("/");
+    // Handle the error in a different way, e.g., render an error page or send a JSON response
+    // res.status(500).json({ message: "An error occurred" });
   }
 };
+
 
 
 exports.getEditProduct = async (req, res, next) => {
@@ -175,13 +180,19 @@ exports.getProducts = async (req, res, next) => {
     const token = await req.cookies.token;
     const decodedToken = jwt.verify(token, "your_secret_key");
     const userId = decodedToken.userId;
-    const products = await Product.find({ userId: userId });
-    console.log(products);
-    res.render("admin/products", {
-      prods: products,
-      pageTitle: "Admin Products",
-      path: "/admin/products",
-    });
+    let isAuthenticated = false; // Initialize isAuthenticated outside of the if block
+    if (token) {
+      isAuthenticated = true;
+      const products = await Product.find({ userId: userId });
+      console.log(products);
+      res.render("admin/products", {
+        prods: products,
+        pageTitle: "Admin Products",
+        path: "/admin/products",
+        isAuthenticated: isAuthenticated, // Use the initialized value
+
+      });
+    }
   } catch (err) {
     console.log(err);
     res.redirect("/login");

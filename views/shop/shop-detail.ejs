@@ -77,13 +77,33 @@
                 <div class="row g-4 mb-5">
                     <div class="col-lg-8 col-xl-9">
                         <div class="row g-4">
-                            <div class="col-lg-6">
-                                <div class="border rounded">
-                                    <a href="#">
-                                        <img src="/styles/images/products/<%= product.imageUrl%>" class="img-fluid rounded" alt="Image">
-                                    </a>
+                            <div class="col-md-12 col-lg-5 h-100 slider">
+                                <div id="carouselId" class="carousel h-100 slide position-relative" data-bs-ride="carousel">
+                                    <div class="carousel-inner h-100" role="listbox">
+                                    <div class="carousel-item active rounded h-100">
+                                        <img src="/styles/images/products/<%= product.folderName %>/<%= product.imageUrl.images[0] %>" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
+
+                                    </div>
+                                    <div class="carousel-item rounded h-100">
+                                        <img src="/styles/images/products/<%= product.folderName %>/<%= product.imageUrl.images[1] %>" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+                                    </div>
+
+                                    <div class="carousel-item rounded h-100">
+                                        <img src="/styles/images/products/<%= product.folderName %>/<%= product.imageUrl.images[2] %>" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+                                    </div>
+
+
+                                    </div>
+                                    <button class="carousel-control-prev bg-color" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next bg-color" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                    </button>
                                 </div>
-                            </div>
+                                </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3"><%= product.title %></h4>
                                 <p class="mb-3">Category: <%= product.category %></p>
