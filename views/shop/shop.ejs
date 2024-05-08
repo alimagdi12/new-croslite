@@ -24,6 +24,12 @@
     width: 100%;
     /* Make sure the width is 100% */
   }
+
+  .left-section {
+    margin-right: 100px;
+  }
+  
+
 </style>
 </head>
 
@@ -47,8 +53,12 @@
         </div>
         <div class="modal-body d-flex align-items-center">
           <div class="input-group w-75 mx-auto d-flex">
-            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+            <!--<input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>-->
+            <form action="/search" method="POST" class="d-flex">
+              <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1" name="search">
+              <button type="submit" id="search-icon-1" class="input-group-text p-3" style="border: none;background-color: transparent;"><i class="fa fa-search"></i></button>
+            </form>
           </div>
         </div>
       </div>
@@ -58,21 +68,21 @@
 
 
   <!-- Single Page Header start -->
-  <div class="container-fluid page-header py-5">
+  <!-- <div class="container-fluid page-header py-5">
     <h1 class="text-center text-white display-6">Shop</h1>
     <ol class="breadcrumb justify-content-center mb-0">
       <li class="breadcrumb-item"><a href="/">Home</a></li>
       <li class="breadcrumb-item"><a href="#">Pages</a></li>
       <li class="breadcrumb-item active text-white">Shop</li>
     </ol>
-  </div>
+  </div>-->
   <!-- Single Page Header End -->
 
 
   <!-- Fruits Shop Start-->
   <div class="container-fluid fruite py-5">
     <div class="container py-5">
-      <div class="row g-4">
+      <div class="row g-4 mt-5">
         <div class="col-lg-12">
           <div class="row g-4">
 
@@ -88,43 +98,56 @@
             <div class="col-6"></div>
             <div class="col-xl-3">
               <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
-                <label for="fruits">Default Sorting:</label>
-                <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                  <option value="all">All</option>
-                  <option value="men">Men</option>
-                  <option value="women">Women</option>
-                  <option value="kids">Kids</option>
-                </select>
+                <form action="/filter?category=all" method="GET" class="w-100 d-flex" id="categoryForm">
+                  <label for="categories"></label>
+                  <select id="categories" name="category" class="border-0 form-select-sm bg-light me-3" form="categoryForm">
+                    <option value="all">All</option>
+                    <option value="men">Men</option>
+                    <option value="women">Women</option>
+                    <option value="kids">Kids</option>
+                  </select>
+                  <input type="submit" value="Filter" class="btn btn-primary">
+                </form>
+
+                <script>
+                  document.getElementById('categoryForm').addEventListener('submit', function(event) {
+                    const selectedCategory = document.getElementById('categories').value;
+                    const actionUrl = `/filter?category=${selectedCategory}`;
+                    this.action = actionUrl;
+                  });
+                </script>
+
+
               </div>
             </div>
           </div>
           <div class="row g-4">
             <div class="col-lg-3">
-              <div class="row g-4">
+              <div class="row g-4 left-section">
                 <div class="col-lg-12">
                   <div class="mb-3">
-                    <h4>Genres</h4>
-                    <ul class="list-unstyled fruite-categorie">
+                    <h4>Categories</h4>
+                    <ul>
                       <li>
                         <div class="d-flex justify-content-between fruite-name">
-                          <a href="#"><i class="bi bi-book-fill me-2"></i>Men</a>
-                          <span>(3)</span>
+                          <a href="#"></i>Men</a>
+                          <span style="color:#9ecc48">( <%= categoryCounts['men'] || 0 %> )</span>
                         </div>
                       </li>
                       <li>
                         <div class="d-flex justify-content-between fruite-name">
-                          <a href="#"><i class="bi bi-book-fill me-2"></i>Women</a>
-                          <span>(5)</span>
+                          <a href="#"></i>Women</a>
+                          <span style="color:#9ecc48">( <%= categoryCounts['women'] || 0 %> )</span>
                         </div>
                       </li>
                       <li>
                         <div class="d-flex justify-content-between fruite-name">
-                          <a href="#"><i class="bi bi-book-fill me-2"></i>Kids</a>
-                          <span>(2)</span>
+                          <a href="#"></i>Kids</a>
+                          <span style="color:#9ecc48">( <%= categoryCounts['kids'] || 0 %> )</span>
                         </div>
                       </li>
-
                     </ul>
+
                   </div>
                 </div>
                 <div class="col-lg-12">
@@ -143,75 +166,75 @@
 
 
             <div class="col-lg-9">
-            <% for(p of prods){%>
+              <% for(p of prods){%>
 
-            
-            <%}%>
+
+              <%}%>
               <div class="row g-4 justify-content-center">
                 <% if (prods.length > 0) { %>
-                <% for (let product of prods) { %>
-                <!-- Product Card -->
-                <div class="col-md-6 col-lg-6 col-xl-4" id="kids">
-                  <!-- Card content -->
-                  <div class="rounded position-relative fruite-item">
-                    <!-- Product Image -->
-                    <div class="fruite-img">
-                      <img src="styles/images/products/<%= product.imageUrl %>" class="img-fluid w-100 rounded-top" alt="">
-                    </div>
-                    <!-- New Tag -->
-                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">New</div>
-                    <!-- Product Details -->
-                    <div class="p-4 border border-secondary border-top-0 rounded-bottom text-center">
-                      <h4><%= product.title %></h4>
-                      <h3><%= product.category%></h3>
-                      <p><%= product.description %></p>
-                      <div class="d-flex justify-content-center align-items-center flex-wrap">
-                        <p class="text-dark fs-5 fw-bold m-0">Price: $<%= product.price %></p>
-                        <div class="d-flex gap-3 mt-3">
-                          <% if (isAuthenticated) { %>
-                          <!-- Add to Cart Form -->
-                          <form action="/cart" method="post">
-                            <button class="btn btn-primary rounded-pill px-3" type="submit">Add to Cart</button>
-                            <input type="hidden" name="productId" value="<%= product._id %>">
-                          </form>
-                          <% } %>
-                          <br>
-                          <!-- Details Button -->
-                          <a href="/products/<%= product._id %>" class="btn btn-primary rounded-pill px-4">Details</a>
-                        </div>
+              <% for (let product of prods) { %>
+              <!-- Product Card -->
+              <div class="col-md-6 col-lg-6 col-xl-4" id="kids">
+                <!-- Card content -->
+                <div class="rounded position-relative fruite-item">
+                  <!-- Product Image -->
+                  <div class="fruite-img">
+                    <img src="styles/images/products/<%= product.imageUrl %>" class="img-fluid w-100 rounded-top" alt="">
+                  </div>
+                  <!-- New Tag -->
+                  <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">New</div>
+                  <!-- Product Details -->
+                  <div class="p-4 border border-secondary border-top-0 rounded-bottom text-center">
+                    <h4><%= product.title %></h4>
+                    <h3><%= product.category%></h3>
+                    <p><%= product.description %></p>
+                    <div class="d-flex justify-content-center align-items-center flex-wrap">
+                      <p class="text-dark fs-5 fw-bold m-0">Price: $<%= product.price %></p>
+                      <div class="d-flex gap-3 mt-3">
+                        <% if (isAuthenticated) { %>
+                        <!-- Add to Cart Form -->
+                        <form action="/cart" method="post">
+                          <button class="btn btn-primary rounded-pill px-3" type="submit">Add to Cart</button>
+                          <input type="hidden" name="productId" value="<%= product._id %>">
+                        </form>
+                        <% } %>
+                        <br>
+                        <!-- Details Button -->
+                        <a href="/products/<%= product._id %>" class="btn btn-primary rounded-pill px-4">Details</a>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <% } %>
-                <% } else { %>
-                <!-- No Products Found -->
-                <h1>No Products Found!</h1>
-                <% } %>
-                <div class="row">
-                  <div class="col">
-                    <% if (hasPreviousPage) { %>
-                    <a href="/products?page=<%= previousPage %>" class="btn btn-primary">Previous</a>
-                    <% } %>
-                  </div>
-                  <div class="col text-center">
-                    Page <%= currentPage %> of <%= lastPage %>
-                  </div>
-                  <div class="col text-end">
-                    <% if (hasNextPage) { %>
-                    <a href="/products?page=<%= nextPage %>" class="btn btn-primary">Next</a>
-                    <% } %>
-                  </div>
+              <% } %>
+              <% } else { %>
+              <!-- No Products Found -->
+              <h1>No Products Found!</h1>
+              <% } %>
+              <div class="row">
+                <div class="col">
+                  <% if (hasPreviousPage) { %>
+                  <a href="/products?page=<%= previousPage %>" class="btn btn-primary">Previous</a>
+                  <% } %>
                 </div>
-
+                <div class="col text-center">
+                  Page <%= currentPage %> of <%= lastPage %>
+                </div>
+                <div class="col text-end">
+                  <% if (hasNextPage) { %>
+                  <a href="/products?page=<%= nextPage %>" class="btn btn-primary">Next</a>
+                  <% } %>
+                </div>
               </div>
 
             </div>
+
           </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
   </div>
   <!-- Fruits Shop End-->
@@ -227,13 +250,17 @@
 
   <!-- JavaScript Libraries -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js">
-    < /scrip> <
+    < /scrip>  <
     script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" >
   </script>
   <script src="styles/lib/easing/easing.min.js"></script>
   <script src="styles/lib/waypoints/waypoints.min.js"></script>
   <script src="styles/lib/lightbox/js/lightbox.min.js"></script>
   <script src="styles/lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="styles/js/main.js"></script>
 
   <!-- Template Javascript -->
   <script src="styles/js/main.js"></script>

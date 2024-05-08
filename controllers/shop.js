@@ -109,18 +109,18 @@ exports.postSearch = async (req, res, next) => {
 
 
 
-exports.getFilter = async (req, res, next) => {
-  const category = req.query.category || 'all';
-  let products;
+// exports.getFilter = async (req, res, next) => {
+//   const category = req.query.category || 'all';
+//   let products;
 
-  if (category === 'all') {
-    products = await Product.find();
-  } else {
-    products = await Product.find({ category: category });
-  }
+//   if (category === 'all') {
+//     products = await Product.find();
+//   } else {
+//     products = await Product.find({ category: category });
+//   }
 
-  res.json(products);
-};
+//   res.json(products);
+// };
 
 
 
@@ -133,7 +133,14 @@ exports.getProducts = async (req, res, next) => {
     isLoggedIn = false;
     const page = parseInt(req.query.page) || 1;
     const perPage = 15;
+    const categoryCounts = await Product.aggregate([
+        { $group: { _id: "$category", count: { $sum: 1 } } }
+      ]);
 
+      const countsMap = {};
+      categoryCounts.forEach(cat => {
+        countsMap[cat._id] = cat.count;
+      });
     try {
       const totalProducts = await Product.countDocuments();
       const products = await Product.find()
@@ -151,6 +158,7 @@ exports.getProducts = async (req, res, next) => {
         previousPage: page - 1,
         lastPage: Math.ceil(totalProducts / perPage),
         isAuthenticated: isLoggedIn,
+        categoryCounts: countsMap
       });
     } catch (err) {
       console.log(err);
@@ -165,7 +173,14 @@ exports.getProducts = async (req, res, next) => {
     isLoggedIn = true;
     const page = parseInt(req.query.page) || 1;
     const perPage = 15;
+    const categoryCounts = await Product.aggregate([
+        { $group: { _id: "$category", count: { $sum: 1 } } }
+      ]);
 
+      const countsMap = {};
+      categoryCounts.forEach(cat => {
+        countsMap[cat._id] = cat.count;
+      });
     try {
       const totalProducts = await Product.countDocuments();
       const products = await Product.find()
@@ -183,7 +198,7 @@ exports.getProducts = async (req, res, next) => {
         previousPage: page - 1,
         lastPage: Math.ceil(totalProducts / perPage),
         isAuthenticated: isLoggedIn,
-        
+        categoryCounts: countsMap
       });
     } catch (err) {
       console.log(err);
@@ -568,4 +583,105 @@ exports.postFooterSearch = (req, res, next) => {
     `,
   });
   res.redirect("/");
+};
+
+
+
+exports.getFilter = async (req, res, next) => {
+  const token = req.cookies.token;
+  let isLoggedIn;
+  const category = req.query.category || 'all'; // Extract the category from the query parameters
+
+  console.log(token);
+  if (!token) {
+    isLoggedIn = false;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 15;
+    const categoryCounts = await Product.aggregate([
+        { $group: { _id: "$category", count: { $sum: 1 } } }
+      ]);
+
+      const countsMap = {};
+      categoryCounts.forEach(cat => {
+        countsMap[cat._id] = cat.count;
+      });
+    try {
+      let products;
+      if (category === 'all') {
+        products = await Product.find()
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else {
+        products = await Product.find({ category: category })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      }
+      const totalProducts = await Product.countDocuments();
+
+      res.render("shop/shop", {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/products",
+        currentPage: page,
+        hasNextPage: perPage * page < totalProducts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalProducts / perPage),
+        isAuthenticated: isLoggedIn,
+        categoryCounts: countsMap
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+  jwt.verify(token, "your_secret_key", async (err, decodedToken) => {
+    if (err) {
+      return (isLoggedIn = false);
+    }
+    console.log(decodedToken);
+    isLoggedIn = true;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 15;
+    const categoryCounts = await Product.aggregate([
+        { $group: { _id: "$category", count: { $sum: 1 } } }
+    ]);
+
+    const countsMap = {};
+      categoryCounts.forEach(cat => {
+      countsMap[cat._id] = cat.count;
+    });
+    try {
+      let products;
+      const totalProducts = await Product.countDocuments();
+      if (category === 'all') {
+        products = await Product.find()
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else {
+        products = await Product.find({ category: category })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      }
+
+      res.render("shop/shop", {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/products",
+        currentPage: page,
+        hasNextPage: perPage * page < totalProducts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalProducts / perPage),
+        isAuthenticated: isLoggedIn,
+        categoryCounts: countsMap
+
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
 };

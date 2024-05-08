@@ -43,10 +43,18 @@
         right: 0 !important
       }
     }
+/*
+    .slider {
+      margin-top: 4%;
+    }
+ */
+    .hero-header {
+      height: 750px;
+    }
   </style>
   <!-- Hero Start -->
   <div class="container-fluid py-5 mb-5 hero-header">
-    <div class="container py-5">
+    <div class="container py-5 h-100">
       <div class="row g-5 align-items-center">
         <div class="col-md-12 col-lg-7">
           <!--  <h1 class="mb-5 display-3 color-white">New Crocs To Make It Elegent</h1> -->
@@ -57,19 +65,19 @@
             </form>
           </div>-->
         </div>
-        <div class="col-md-12 col-lg-5">
-          <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
-            <div class="carousel-inner" role="listbox">
-              <div class="carousel-item active rounded">
-                <img src="styles/images/home/slider3.jpg" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
+        <div class="col-md-12 col-lg-5 h-100 slider">
+          <div id="carouselId" class="carousel h-100 slide position-relative" data-bs-ride="carousel">
+            <div class="carousel-inner h-100" role="listbox">
+              <div class="carousel-item active rounded h-100">
+                <img src="styles/images/home/slider1.jpg" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
 
               </div>
-              <div class="carousel-item rounded">
+              <div class="carousel-item rounded h-100">
+                <img src="styles/images/home/slider3.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+              </div>
+
+              <div class="carousel-item rounded h-100">
                 <img src="styles/images/home/slider2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
-              </div>
-
-              <div class="carousel-item rounded">
-                <img src="styles/images/home/slider1.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
               </div>
 
 
@@ -392,7 +400,11 @@
         </div> -->
   <!-- Vesitable Shop End -->
 
-
+  <style>
+    .banner-second {
+      height: 100%;
+    }
+  </style>
   <!-- Banner Section Start-->
   <div class="container-fluid banner bg-section my-5">
     <div class="container py-5">
@@ -405,9 +417,9 @@
             <a href="/shop" class="banner-btn btn border-2 border-white rounded-pill bg-color-second color-second py-3 px-5">BUY</a>
           </div>
         </div>
-        <div class="col-lg-6">
-          <div class="position-relative">
-            <img src="styles/images/home/sale.jpg" class="img-fluid w-100 rounded" alt="" style="height:650px">
+        <div class="col-lg-6 banner-second">
+          <div class="position-relative h-100">
+            <img src="styles/images/home/sale.jpg" class="img-fluid w-100 rounded" alt="" style="height:100%">
             <!--<div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute" style="width: 140px; height: 140px; top: 0; left: 0;">
               <!--<h1 style="font-size: 100px;">1</h1>-->
             <div class="d-flex flex-column">

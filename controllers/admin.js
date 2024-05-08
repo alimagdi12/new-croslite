@@ -33,8 +33,12 @@ exports.postAddProduct = async (req, res, next) => {
     const description = req.body.description;
     const details = req.body.details;
     const errors = validationResult(req);
+
     const token = await req.cookies.token;
     const decodedToken = await jwt.verify(token, "your_secret_key");
+    if (!token) {
+      
+    }
     const userId = decodedToken.userId;
 
     if (!errors.isEmpty()) {
