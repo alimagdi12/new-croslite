@@ -1,60 +1,5 @@
 <%- include('../includes/head.ejs') %>
-<style>
-.banner-second {
-      height: 100%;
-    }
-    @media (max-width: 991px) {
-      #hero-search {
-        width: 100% !important
-      }
-
-      #hero-button {
-        right: 0 !important
-      }
-    }
-/*
-    .slider {
-      margin-top: 4%;
-    }
- */
-    .hero-header {
-      height: 750px;
-    }
-
-
-
-    #rotatingImage {
-    animation: rotate 25s linear infinite; /* Change 10s to adjust the speed */
-    width: 80%;
-    height: 80%;
-    position: relative;
-}
-
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(-360deg);
-    }
-}
-
-#rotate-logo{
-  position: absolute;
-  top:36%;
-  width: 15%;
-  left:43%
-}
-
-#spin-container{
-position:relative;
-text-align:center;
-display:block;
-margin-top:-20px;
-margin-bottom:-20px
-}
-
-</style>
+  <link href="css/home.css" rel="stylesheet">
 </head>
 
 <body>
@@ -241,6 +186,8 @@ margin-bottom:-20px
 
 
 <div class="container" id="spin-container">
+<h1>Our Products Wheel</h1>
+<h5>Press anywhere to find more !</h5>
 <a href="/products">
 <img src="/styles/images/Nav_Logo.png" alt="" id="rotate-logo">
   <img class="image1" id="rotatingImage" src="/styles/images/home/1.png" alt="Image 1">

@@ -13,23 +13,24 @@
     <!-- Main css -->
     <link rel="stylesheet" href="styles/signup/css/style.css">
     <style>
-        
-        img{
+        img {
             height: 99%;
+        }
+        .validation-message{
+            color: red;
         }
     </style>
 </head>
 <body>
 
-    <div class="main" >
-
+    <div class="main">
         <div class="container">
             <div class="signup-content">
                 <div class="signup-img" style="width: 500px;">
                     <img src="styles/signup/images/login.jpg" alt="">
                     <div class="signup-img-content">
-                        <h2>Register now </h2>
-                        <p>while seats are available !</p>
+                        <h2>Register now</h2>
+                        <p>while seats are available!</p>
                     </div>
                 </div>
                 <div class="signup-form">
@@ -47,7 +48,7 @@
                                     <div id="lastNameError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
-                                    <label for="last_name" class="required">User name</label>
+                                    <label for="user_name" class="required">User name</label>
                                     <input type="text" name="userName" id="user_name" />
                                     <div id="userNameError" class="validation-message"></div>
                                 </div>
@@ -61,43 +62,26 @@
                                     <input type="email" name="email" id="email" />
                                     <div id="emailError" class="validation-message"></div>
                                 </div>
-                                
                             </div>
                             <div class="form-group">
-
-
                                 <div class="form-input">
                                     <label for="phone_number" class="required">Phone number</label>
                                     <input type="text" name="mobile" id="phone_number" />
                                     <div id="phoneError" class="validation-message"></div>
                                 </div>
-                                <!-- <div class="form-select">
-                                    <div class="label-flex">
-                                        <label for="meal_preference">meal preference</label>
-                                        <a href="#" class="form-link">Lunch detail</a>
-                                    </div>
-                                    <div class="select-list">
-                                        <select name="meal_preference" id="meal_preference">
-                                            <option value="Vegetarian">Vegetarian</option>
-                                            <option value="Kosher">Kosher</option>
-                                            <option value="Asian Vegetarian">Asian Vegetarian</option>
-                                        </select>
-                                    </div>
-                                </div> -->
                                 <div class="form-radio">
                                     <div class="label-flex">
                                         <label for="payment">Gender</label>
-                                        
                                     </div>
-                                    <div class="form-radio-group">            
+                                    <div class="form-radio-group">
                                         <div class="form-radio-item">
-                                            <input type="radio" checked="checked" name="gender" value="male" id="cheque">
-                                            <label for="cheque">Male</label>
+                                            <input type="radio" checked="checked" name="gender" value="male" id="male">
+                                            <label for="male">Male</label>
                                             <span class="check"></span>
                                         </div>
                                         <div class="form-radio-item">
-                                            <input type="radio" name="gender" value="female" id="demand">
-                                            <label for="demand">Female</label>
+                                            <input type="radio" name="gender" value="female" id="female">
+                                            <label for="female">Female</label>
                                             <span class="check"></span>
                                         </div>
                                     </div>
@@ -107,33 +91,24 @@
                                     <input type="date" name="birthday" id="chequeno" />
                                 </div>
                                 <div class="form-input">
-                                    <label for="blank_name">Password</label>
+                                    <label for="password">Password</label>
                                     <input type="password" name="password" id="password" />
                                     <div id="passwordError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
-                                    <label for="payable">Confirm Password</label>
+                                    <label for="confirm_password">Confirm Password</label>
                                     <input type="password" name="confirmPassword" id="confirm_password" />
                                     <div id="confirmPasswordError" class="validation-message"></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="donate-us">
-                            <label>Donate us</label>
-                            <div class="price_slider ui-slider ui-slider-horizontal">
-                                <div id="slider-margin"></div>
-                                <span class="donate-value" id="value-lower"></span>
-                            </div>
-                        </div> -->
                         <div class="form-submit">
                             <input type="submit" value="SignUp" class="submit" id="submit" name="submit" />
-                            <!-- <input type="submit" value="Login" class="submit" id="reset" name="reset" /> -->
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- JS -->
@@ -143,76 +118,99 @@
     <script src="styles/signup/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="styles/signup/vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="styles/signup/js/main.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("register-form");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.getElementById("register-form");
 
-    form.addEventListener("submit", function (event) {
-        var errors = [];
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                var errors = [];
 
-        // Validate first name
-        var firstNameInput = document.getElementById("first_name");
-        if (!firstNameInput.value.match(/^[a-zA-Z]{3,}$/)) {
-            errors.push("First name must contain only letters and be at least 3 characters long.");
-        }
+                // Clear previous error messages
+                var errorMessages = document.querySelectorAll('.validation-message');
+                errorMessages.forEach(function (message) {
+                    message.textContent = "";
+                });
 
-        // Validate last name
-        var lastNameInput = document.getElementById("last_name");
-        if (!lastNameInput.value.match(/^[a-zA-Z]{3,}$/)) {
-            errors.push("Last name must contain only letters and be at least 3 characters long.");
-        }
+                // Validate first name
+                var firstNameInput = document.getElementById("first_name");
+                var firstNameError = document.getElementById("firstNameError");
+                if (!firstNameInput.value.match(/^[a-zA-Z]{3,}$/)) {
+                    firstNameError.textContent = "First name must contain only letters and be at least 3 characters long.";
+                    errors.push(firstNameError.textContent);
+                }
 
-        // Validate user name
-        var userNameInput = document.getElementById("user_name");
-        if (!userNameInput.value.match(/^[a-zA-Z0-9]{5,}$/)) {
-            errors.push("User name must contain only letters, numbers, and be at least 5 characters long.");
-        }
+                // Validate last name
+                var lastNameInput = document.getElementById("last_name");
+                var lastNameError = document.getElementById("lastNameError");
+                if (!lastNameInput.value.match(/^[a-zA-Z]{3,}$/)) {
+                    lastNameError.textContent = "Last name must contain only letters and be at least 3 characters long.";
+                    errors.push(lastNameError.textContent);
+                }
 
-        // Validate company name
-        var companyNameInput = document.getElementById("company");
-        if (!companyNameInput.value.match(/^[a-zA-Z]{5,}$/)) {
-            errors.push("Company name must contain only letters and be at least 5 characters long.");
-        }
+                // Validate user name
+                var userNameInput = document.getElementById("user_name");
+                var userNameError = document.getElementById("userNameError");
+                if (!userNameInput.value.match(/^[a-zA-Z0-9]{5,}$/)) {
+                    userNameError.textContent = "User name must contain only letters, numbers, and be at least 5 characters long.";
+                    errors.push(userNameError.textContent);
+                }
 
-        // Validate email
-        var emailInput = document.getElementById("email");
-        if (!emailInput.value.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
-            errors.push("Please enter a valid email address.");
-        }
+                // Validate company name
+                var companyNameInput = document.getElementById("company");
+                var companyError = document.getElementById("companyError");
+                if (!companyNameInput.value.match(/^[a-zA-Z\s]{5,}$/)) {
+                    companyError.textContent = "Company name must contain only letters and spaces, and be at least 5 characters long.";
+                    errors.push(companyError.textContent);
+                }
 
-        // Validate phone number
-        var phoneInput = document.getElementById("phone_number");
-        if (!phoneInput.value.match(/^\d{10}$/)) {
-            errors.push("Please enter a valid phone number.");
-        }
 
-        // Validate password
-        var passwordInput = document.getElementById("password");
-        if (!passwordInput.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/)) {
-            errors.push("Password must contain at least one uppercase letter, one lowercase letter, and one number, and be at least 8 characters long.");
-        }
+                // Validate email
+                var emailInput = document.getElementById("email");
+                var emailError = document.getElementById("emailError");
+                if (!emailInput.value.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+                    emailError.textContent = "Please enter a valid email address.";
+                    errors.push(emailError.textContent);
+                }
 
-        // Validate confirm password
-        var confirmPasswordInput = document.getElementById("confirm_password");
-        if (confirmPasswordInput.value !== passwordInput.value) {
-            errors.push("Passwords do not match.");
-        }
+                // Validate phone number
+                var phoneInput = document.getElementById("phone_number");
+                var phoneError = document.getElementById("phoneError");
+                if (!phoneInput.value.match(/^\d{10,15}$/)) {
+                    phoneError.textContent = "Please enter a valid phone number.";
+                    errors.push(phoneError.textContent);
+                }
 
-        // Display error messages
-        var errorContainer = document.getElementById("error-messages");
-        errorContainer.innerHTML = "";
-        if (errors.length > 0) {
-            event.preventDefault();
-            errors.forEach(function (error) {
-                var errorMessage = document.createElement("div");
-                errorMessage.textContent = error;
-                errorContainer.appendChild(errorMessage);
+
+                // Validate password
+                var passwordInput = document.getElementById("password");
+                var passwordError = document.getElementById("passwordError");
+                if (!passwordInput.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/)) {
+                    passwordError.textContent = "Password must contain at least one uppercase letter, one lowercase letter, and one number, and be at least 8 characters long.";
+                    errors.push(passwordError.textContent);
+                }
+
+                // Validate confirm password
+                var confirmPasswordInput = document.getElementById("confirm_password");
+                var confirmPasswordError = document.getElementById("confirmPasswordError");
+                if (confirmPasswordInput.value !== passwordInput.value) {
+                    confirmPasswordError.textContent = "Passwords do not match.";
+                    errors.push(confirmPasswordError.textContent);
+                }
+
+                // Display error messages
+                var errorContainer = document.getElementById("error-messages");
+                errorContainer.innerHTML = "";
+                if (errors.length > 0) {
+                    event.preventDefault();
+                    errors.forEach(function (error) {
+                        var errorMessage = document.createElement("div");
+                        errorMessage.textContent = error;
+                        errorContainer.appendChild(errorMessage);
+                    });
+                }
             });
-        }
-    });
-});
-
-</script>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
+        });
+    </script>
+</body>
 </html>
