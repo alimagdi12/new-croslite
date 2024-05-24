@@ -3,37 +3,38 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  userName:{
-    type:String,
-    required:true
-  },
-  firstName:{
-    type:String,
-    required:true
-  },
-  lastName:{
-    type:String,
-    required:true
-  },
-  companyName:{
-    type:String,
-    required:true
-  },
-  birthDay:{
-    type:Date,
-    required:true
-  },
-  gender:{
-    type:String,
-    required:true
-  },
-  email: {
+  userName: {
     type: String,
     required: true
   },
-  phoneNumber:{
-    type:String,
-    required:true
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  companyName: {
+    type: String,
+    required: true
+  },
+  birthDay: {
+    type: Date,
+    required: true
+  },
+  gender: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.']
+  },
+  phoneNumber: {
+    type: String,
+    required: true
   },
   password: {
     type: String,
@@ -55,7 +56,43 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.methods.addToCart = function(product) {
+userSchema.methods.increaseQuantityInCart = async function(productId) {
+  const cartProductIndex = this.cart.items.findIndex(cp => {
+    return cp.productId.toString() === productId.toString();
+  });
+  if (cartProductIndex >= 0) {
+    this.cart.items[cartProductIndex].quantity++;
+    try {
+      return await this.save();
+    } catch (error) {
+      console.error('Error increasing quantity in cart:', error);
+      throw error;
+    }
+  }
+};
+
+userSchema.methods.decreaseQuantityInCart = async function(productId) {
+  const cartProductIndex = this.cart.items.findIndex(cp => {
+    return cp.productId.toString() === productId.toString();
+  });
+  if (cartProductIndex >= 0) {
+    const currentQuantity = this.cart.items[cartProductIndex].quantity;
+    if (currentQuantity > 1) {
+      this.cart.items[cartProductIndex].quantity--;
+    } else {
+      // If quantity is already 1, remove the item from the cart
+      this.cart.items.splice(cartProductIndex, 1);
+    }
+    try {
+      return await this.save();
+    } catch (error) {
+      console.error('Error decreasing quantity in cart:', error);
+      throw error;
+    }
+  }
+};
+
+userSchema.methods.addToCart = async function(product) {
   const cartProductIndex = this.cart.items.findIndex(cp => {
     return cp.productId.toString() === product._id.toString();
   });
@@ -75,20 +112,36 @@ userSchema.methods.addToCart = function(product) {
     items: updatedCartItems
   };
   this.cart = updatedCart;
-  return this.save();
+  try {
+    return await this.save();
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    throw error;
+  }
 };
 
-userSchema.methods.removeFromCart = function(productId) {
+userSchema.methods.removeFromCart = async function(productId) {
   const updatedCartItems = this.cart.items.filter(item => {
     return item.productId.toString() !== productId.toString();
   });
   this.cart.items = updatedCartItems;
-  return this.save();
+  try {
+    return await this.save();
+  } catch (error) {
+    console.error('Error removing from cart:', error);
+    throw error;
+  }
 };
 
-userSchema.methods.clearCart = function() {
+userSchema.methods.clearCart = async function() {
   this.cart = { items: [] };
-  return this.save();
+  try {
+    return await this.save();
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+    throw error;
+  }
 };
 
 module.exports = mongoose.model('User', userSchema);
+  

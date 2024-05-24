@@ -44,4 +44,15 @@ router.post('/updateUser',isAuth,shopController.postUpdateUser);
 router.get('/filter', shopController.getFilter);
 
 
+router.post('/cart-add-quantity',
+isAuth,
+shopController.postIncreaseCart
+)
+
+
+router.post('/cart-decrease-quantity',
+isAuth,
+shopController.postDecreaseCart
+)
+
 module.exports = router;

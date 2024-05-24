@@ -346,8 +346,6 @@ exports.getCart = async (req, res, next) => {
       (total, p) => total + p.productId.price * p.quantity,
       0
     ); // Calculate total price
-    console.log(totalPrice);
-    console.log("this is cart", products);
     res.render("shop/cart", {
       path: "/cart",
       pageTitle: "Cart",
@@ -684,4 +682,51 @@ exports.getFilter = async (req, res, next) => {
       res.status(500).json({ message: "Internal Server Error" });
     }
   });
+};
+
+exports.postIncreaseCart = async (req, res, next) => {
+    const productId = req.body.prodId; 
+  let token = req.cookies.token;
+  console.log('Request Body:', req.body);
+    console.log('Product ID:', productId);
+        jwt.verify(token, "your_secret_key", async (err, decodedToken) => {
+        if (err) {
+          return res.redirect('/cart');
+          console.error(err)
+        }
+
+        try {
+            const user = await User.findById(decodedToken.userId);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            await user.increaseQuantityInCart(productId);
+            return res.redirect('/cart');
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ msg: 'Server error' });
+        }
+    });
+};
+
+exports.postDecreaseCart = async (req, res, next) => {
+    const productId = req.body.prodId; 
+    let token = req.cookies.token;
+    jwt.verify(token, 'your_secret_key', async (err, decodedToken) => {
+        if (err) {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        try {
+            const user = await User.findById(decodedToken.userId);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            await user.decreaseQuantityInCart(productId);
+            return res.status(200).json({ message: 'Quantity decreased successfully' });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ msg: 'Server error' });
+        }
+    });
 };
