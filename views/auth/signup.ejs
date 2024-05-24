@@ -39,22 +39,27 @@
                                 <div class="form-input">
                                     <label for="first_name" class="required">First name</label>
                                     <input type="text" name="fName" id="first_name" />
+                                    <div id="firstNameError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
                                     <label for="last_name" class="required">Last name</label>
                                     <input type="text" name="lName" id="last_name" />
+                                    <div id="lastNameError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
                                     <label for="last_name" class="required">User name</label>
-                                    <input type="text" name="userName" id="last_name" />
+                                    <input type="text" name="userName" id="user_name" />
+                                    <div id="userNameError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
                                     <label for="company" class="required">Company</label>
                                     <input type="text" name="companyName" id="company" />
+                                    <div id="companyError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
                                     <label for="email" class="required">Email</label>
                                     <input type="email" name="email" id="email" />
+                                    <div id="emailError" class="validation-message"></div>
                                 </div>
                                 
                             </div>
@@ -64,6 +69,7 @@
                                 <div class="form-input">
                                     <label for="phone_number" class="required">Phone number</label>
                                     <input type="text" name="mobile" id="phone_number" />
+                                    <div id="phoneError" class="validation-message"></div>
                                 </div>
                                 <!-- <div class="form-select">
                                     <div class="label-flex">
@@ -102,11 +108,13 @@
                                 </div>
                                 <div class="form-input">
                                     <label for="blank_name">Password</label>
-                                    <input type="password" name="password" value="<%= oldInput.password %>" id="blank_name" />
+                                    <input type="password" name="password" id="password" />
+                                    <div id="passwordError" class="validation-message"></div>
                                 </div>
                                 <div class="form-input">
                                     <label for="payable">Confirm Password</label>
-                                    <input type="password" name="confirmPassword" id="payable" />
+                                    <input type="password" name="confirmPassword" id="confirm_password" />
+                                    <div id="confirmPasswordError" class="validation-message"></div>
                                 </div>
                             </div>
                         </div>
@@ -135,5 +143,76 @@
     <script src="styles/signup/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="styles/signup/vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="styles/signup/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("register-form");
+
+    form.addEventListener("submit", function (event) {
+        var errors = [];
+
+        // Validate first name
+        var firstNameInput = document.getElementById("first_name");
+        if (!firstNameInput.value.match(/^[a-zA-Z]{3,}$/)) {
+            errors.push("First name must contain only letters and be at least 3 characters long.");
+        }
+
+        // Validate last name
+        var lastNameInput = document.getElementById("last_name");
+        if (!lastNameInput.value.match(/^[a-zA-Z]{3,}$/)) {
+            errors.push("Last name must contain only letters and be at least 3 characters long.");
+        }
+
+        // Validate user name
+        var userNameInput = document.getElementById("user_name");
+        if (!userNameInput.value.match(/^[a-zA-Z0-9]{5,}$/)) {
+            errors.push("User name must contain only letters, numbers, and be at least 5 characters long.");
+        }
+
+        // Validate company name
+        var companyNameInput = document.getElementById("company");
+        if (!companyNameInput.value.match(/^[a-zA-Z]{5,}$/)) {
+            errors.push("Company name must contain only letters and be at least 5 characters long.");
+        }
+
+        // Validate email
+        var emailInput = document.getElementById("email");
+        if (!emailInput.value.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+            errors.push("Please enter a valid email address.");
+        }
+
+        // Validate phone number
+        var phoneInput = document.getElementById("phone_number");
+        if (!phoneInput.value.match(/^\d{10}$/)) {
+            errors.push("Please enter a valid phone number.");
+        }
+
+        // Validate password
+        var passwordInput = document.getElementById("password");
+        if (!passwordInput.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/)) {
+            errors.push("Password must contain at least one uppercase letter, one lowercase letter, and one number, and be at least 8 characters long.");
+        }
+
+        // Validate confirm password
+        var confirmPasswordInput = document.getElementById("confirm_password");
+        if (confirmPasswordInput.value !== passwordInput.value) {
+            errors.push("Passwords do not match.");
+        }
+
+        // Display error messages
+        var errorContainer = document.getElementById("error-messages");
+        errorContainer.innerHTML = "";
+        if (errors.length > 0) {
+            event.preventDefault();
+            errors.forEach(function (error) {
+                var errorMessage = document.createElement("div");
+                errorMessage.textContent = error;
+                errorContainer.appendChild(errorMessage);
+            });
+        }
+    });
+});
+
+</script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
 </html>
