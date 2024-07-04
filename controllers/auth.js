@@ -97,6 +97,7 @@ exports.postLogin = (req, res, next) => {
                 userId: user._id.toString(),
               },
               "your_secret_key",
+<<<<<<< HEAD
               { expiresIn: "3h" }
             );
             console.log("Token:", token);
@@ -110,6 +111,15 @@ exports.postLogin = (req, res, next) => {
               .header({ jwt: token })
               .cookie("token", token, { maxAge: 3600000, httpOnly: true });
             return res.redirect("/");
+=======
+              { expiresIn: "1h" }
+            );
+            console.log("Token:", token);
+            res
+              .header({ jwt: token })
+              .cookie("token", token, { maxAge: 3600000, httpOnly: true });
+            res.redirect("/");
+>>>>>>> b95c79e771431ed57d2c936437f083d4f12baefa
           }
           return res.status(422).render("auth/login", {
             path: "/login",

@@ -419,6 +419,7 @@ exports.postOrder = async (req, res, next) => {
             return acc + product.quantity * product.product.price;
           }, 0);
 
+<<<<<<< HEAD
           // Send email with product details
           transporter.sendMail({
             to: decodedToken.email,
@@ -515,6 +516,24 @@ exports.postOrder = async (req, res, next) => {
 </body>
 </html>
 
+=======
+          // Send email with products details
+          transporter.sendMail({
+            to: decodedToken.email,
+            from: "alimagdi12367@gmail.com",
+            subject: "Order details",
+            html: `
+              <p>Your order details:</p>
+              <ul>
+                ${products
+                  .map(
+                    (product) =>
+                      `<li>${product.product.title} - ${product.quantity} x $${product.product.price}</li>`
+                  )
+                  .join("")}
+              </ul>
+              <p>Total Price: $${totalPrice}</p>
+>>>>>>> b95c79e771431ed57d2c936437f083d4f12baefa
             `,
           });
         })
@@ -651,6 +670,7 @@ exports.postFooterSearch = (req, res, next) => {
   transporter.sendMail({
     to: "alimagdi12367@gmail.com",
     from: "alimagdi12367@gmail.com",
+<<<<<<< HEAD
     subject: "Contact Subscribe",
     html: `
       <html>
@@ -718,6 +738,15 @@ exports.postFooterSearch = (req, res, next) => {
         </div>
       </body>
       </html>
+=======
+    subject: "contact subscribe ",
+    html: `
+      <p>Contact subscribe:</p>
+      <ul>
+      <li>${email}</li>
+  
+      </ul>
+>>>>>>> b95c79e771431ed57d2c936437f083d4f12baefa
     `,
   });
   res.redirect("/");
@@ -725,7 +754,10 @@ exports.postFooterSearch = (req, res, next) => {
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b95c79e771431ed57d2c936437f083d4f12baefa
 exports.getFilter = async (req, res, next) => {
   const token = req.cookies.token;
   let isLoggedIn;
